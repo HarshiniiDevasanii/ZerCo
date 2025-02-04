@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url("https://img.freepik.com/free-vector/erupi-erupee-symbol-white-background-design_1017-45227.jpg?ga=GA1.1.839893145.1726393190&semt=ais_hybrid");
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+    }
+    .payment-container {
+      max-width:400px;
+      margin:150px auto 0 780px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .hidden {
+      display: none;
+    }
+    button {
+      font-size: 16px;
+      background-color: #7c6be1;
+      border: none;
+      padding: 10px 15px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #5548b3;
+    }
+    h2 {
+      color: #f99806;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-container">
+    <form>
+      <h2>Payment Options</h2>
+      <div class="input-group">
+        <label for="amount">Amount:</label>
+        <input id="amount" type="text" readonly>
+      </div>
+      <div class="input-group">
+        <label for="date">Date:</label>
+        <input id="date" type="text" readonly>
+      </div>
+      <div class="input-group">
+        <label for="payment-method">Select Payment Method:</label>
+        <select id="payment-method">
+          <option value="upi">UPI</option>
+          <option value="card">Card</option>
+          <option value="netbanking">Netbanking</option>
+        </select>
+      </div>
+
+      <div id="upi-fields" class="hidden">
+        <div class="input-group">
+          <label for="upi-id">UPI ID:</label>
+          <input type="text" id="upi-id" placeholder="Enter UPI ID">
+        </div>
+      </div>
+
+      <div id="id-card-fields" class="hidden">
+        <div class="input-group">
+          <label for="id-card-number">Card Number:</label>
+          <input type="text" id="id-card-number" placeholder="Enter Card Number">
+        </div>
+        <div class="input-group">
+          <label for="id-card-name">Name on Card:</label>
+          <input type="text" id="id-card-name" placeholder="Enter Name">
+        </div>
+      </div>
+
+      <div id="netbanking-fields" class="hidden">
+        <div class="input-group">
+          <label for="bank-name">Bank Name:</label>
+          <input type="text" id="bank-name" placeholder="Enter Bank Name">
+        </div>
+        <div class="input-group">
+          <label for="account-number">Account Number:</label>
+          <input type="text" id="account-number" placeholder="Enter Account Number">
+        </div>
+      </div>
+
+      <div style="text-align: center;">
+        <button type="submit" onclick="processPayment(event)">Pay Now</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    
+    document.getElementById('payment-method').addEventListener('change', function () {
+      document.getElementById('upi-fields').classList.add('hidden');
+      document.getElementById('id-card-fields').classList.add('hidden');
+      document.getElementById('netbanking-fields').classList.add('hidden');
+
+      const selectedValue = this.value;
+      if (selectedValue === 'upi') {
+        document.getElementById('upi-fields').classList.remove('hidden');
+      } else if (selectedValue === 'card') {
+        document.getElementById('id-card-fields').classList.remove('hidden');
+      } else if (selectedValue === 'netbanking') {
+        document.getElementById('netbanking-fields').classList.remove('hidden');
+      }
+    });
+
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const amount = params.get('workspace') || params.get('playhall');
+      const date = params.get('date');
+
+      if (amount) document.getElementById('amount').value = amount;
+      if (date) document.getElementById('date').value = date;
+    };
+
+    async function processPayment(event) {
+      event.preventDefault();
+
+      const amount = document.getElementById('amount').value;
+      const date = document.getElementById('date').value;
+      const method = document.getElementById('payment-method').value;
+
+      const data = { amount, date, method };
+      if (method === 'upi') {
+        data.upiId = document.getElementById('upi-id').value.trim();
+      } else if (method === 'card') {
+        data.cardNumber = document.getElementById('card-number').value.trim();
+        data.cardName = document.getElementById('card-name').value.trim();
+      } else if (method === 'netbanking') {
+        data.bankName = document.getElementById('bank-name').value.trim();
+        data.accountNumber = document.getElementById('account-number').value.trim();
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/paymentzerco/pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert('Payment Successful!');
+          window.location.href="success.html";
+        } else {
+          alert(`Payment failed: ${result.message}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Unable to process payment. Please try again.');
+      }
+    }
+  </script>
+</body>
+</html>

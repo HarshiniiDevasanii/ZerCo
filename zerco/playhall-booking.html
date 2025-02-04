@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playhall Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image:url("https://img.freepik.com/free-vector/banner-template-with-many-kids-flowers_1308-34181.jpg?ga=GA1.1.839893145.1726393190&semt=ais_hybrid");
+            background-size: cover;
+            background-position:  50% -250px; 
+            color: #333;
+            font:1.8 sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin-top:280px;
+            margin-left: 420px;
+            padding: 10px;
+            background-color: rgba(221, 226, 247, 0.2);
+            border-radius: 8px;
+            box-shadow: 10px 0 10px rgba(0, 0, 0, 0.1);
+            
+        }
+        h2 {
+            text-align: center;
+            color: #254926;
+        }
+        label {
+            display: block;
+            margin: 30px 0px 50px;
+            font-weight: bolder;
+        }
+        select, input[type="date"] {
+            width: 98%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #a55454;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #dadee3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Playhall Booking</h2>
+        <form id="playhallBookingForm">
+            <label for="playhall">Select Playhall:</label>
+            <select id="playhall" name="playhall" required>
+                <option value="" disabled selected>Select an option</option>
+                <option value="See-Saw 900">See-Saw Rs 900</option>
+                <option value="Mini Chess 800">Mini-chess Rs 800</option>
+                <option value="Laser Tag  700">Laser Tag Rs 700</option>
+                <option value="Ball Pit 800">Ball Pit Rs 800</option>
+                <option value="Dress-Up Corner 900">Dress-Up Corner Rs 900</option>
+                <option value="Mini Basketball Court 1000">Mini Basketball Court RS 1000</option>
+            </select>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+            <button type="button" onclick="getout()">Book Playhall</button>
+        </form>
+    </div>
+    <script>
+        function getout() {
+    const playhall = document.getElementById('playhall').value;
+    const date=document.getElementById('date').value;
+    if (!playhall || !date) {
+        alert("Please select all required fields.");
+        return;
+    }
+
+    const confirmBooking = confirm("Are you sure you want to book?");
+    if (confirmBooking) {
+        alert("Successfully booked");
+        const paymentUrl = `payment.html?playhall=${encodeURIComponent(playhall)}&date=${encodeURIComponent(date)}`;
+        window.location.href = paymentUrl;
+    } else {
+        alert("Booking cancelled");
+    }
+}
+
+    </script>
+</body>
+</html>

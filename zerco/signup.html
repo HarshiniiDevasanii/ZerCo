@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("https://img.freepik.com/free-vector/modern-business-team-working-open-office-space_74855-5541.jpg?ga=GA1.1.839893145.1726393190&semt=ais_hybrid");
+            background-repeat: no-repeat;
+            background-position: right center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            margin-right: 200px;
+        }
+        h2 {
+            color: #341d81;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 16px;
+            color: #333;
+            text-align: left;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #00070e;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <form id="signupform">
+            <label for="name">Username:</label>
+            <input type="text" id="signupname" name="username" required>
+            <label for="signuppassword">Password:</label>
+            <input type="password" id="signuppassword" name="password" required>
+            <button type="submit">Register</button>
+            <a href="login.html">Already Have an account?</a>
+        </form>
+    </div>
+    <script>
+        document.getElementById('signupform').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const Sname = document.getElementById('signupname').value;
+    const Spassword = document.getElementById('signuppassword').value;
+
+    const signupData = {
+        name: Sname,
+        password: Spassword,
+    };
+
+    try {
+        const response = await fetch('http://localhost:3000/userzerco/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(signupData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert(result.message);
+            window.location.href = 'login.html';
+        } else {
+            alert(`Error: ${result.message}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    }
+});
+    
+    </script>
+</body>
+</html>

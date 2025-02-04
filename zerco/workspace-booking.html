@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("https://img.freepik.com/free-photo/office-supplies-with-computer-notebook-white-desk_1357-242.jpg?ga=GA1.1.839893145.1726393190&semt=ais_hybrid");
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background-color: rgba(230, 228, 228, 0.9);
+            margin:300px auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 {
+            color: #594bd6;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-size: 16px;
+            color: #333;
+            text-align: left;
+        }
+        select,
+        input[type="date"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #010911;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #129bb6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Workspace Booking</h2>
+        <form id="workspaceBookingForm" onsubmit="return handleBooking()">
+            <label for="workspace">Select Workspace:</label>
+            <select id="workspace" name="workspace" required>
+                <option value="Innovator's Nook - Rs 900">Innovator's Nook Rs 900</option>
+                <option value="Idea Hub - Rs 1500">Idea Hub Rs 1500</option>
+                <option value="Solo Study - Rs 900">Solo Study Rs 900</option>
+                <option value="Conference Chamber - Rs 2000">Conference Chamber Rs 2000</option>
+                <option value="Workspace Workshop - Rs 3000">Workspace Workshop Rs 3000</option>
+                <option value="Virtual Vista">Virtual Vista</option>
+                <option value="Remote Collaboration Hub - Rs 3000">Remote Collaboration Hub Rs 3000</option>
+                <option value="Digital Meeting Room - Rs 2000">Digital Meeting Room Rs 2000</option>
+                <option value="Webinar Workspace - Rs 3000">Webinar Workspace Rs 3000</option>
+            </select>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+            <button type="submit">Book Workspace</button>
+        </form>
+    </div>
+    <script>
+        function handleBooking() {
+            const workspace = document.getElementById('workspace').value;
+            const date = document.getElementById('date').value;
+
+            if (!workspace || !date) {
+                alert("Please fill in all required fields.");
+                return false;
+            }
+
+            const confirmBooking = confirm(`Are you sure you want to book the following?\n\nWorkspace: ${workspace}\nDate: ${date}`);
+            if (confirmBooking) {
+                alert("Booking successful!");
+
+                const paymentUrl = `payment.html?workspace=${encodeURIComponent(workspace)}&date=${encodeURIComponent(date)}`;
+                window.location.href = paymentUrl;
+                return false; 
+            } else {
+                alert("Booking cancelled.");
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>
